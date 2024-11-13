@@ -4,7 +4,7 @@
 from PIL import Image, ImageDraw
 
 # Load base image and mucaro image
-base_image_path = "/mnt/data/pixelcut-export.png"
+base_image_path = "/mnt/data/vaporwave_lares.png"
 base_image = Image.open(base_image_path)
 detailed_owl_path = "/mnt/data/A_close-up_image_of_a_Puerto_Rican_owl,_known_as_a.png"
 detailed_owl = Image.open(detailed_owl_path)
