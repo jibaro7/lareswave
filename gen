@@ -4,7 +4,7 @@
 from PIL import Image, ImageDraw
 
 # Load base image and mucaro image
-base_image_path = "/mnt/data/vaporwave_lares.png"
+base_image_path = "/mnt/data/pixelcut-export.png"
 base_image = Image.open(base_image_path)
 detailed_owl_path = "/mnt/data/A_close-up_image_of_a_Puerto_Rican_owl,_known_as_a.png"
 detailed_owl = Image.open(detailed_owl_path)
@@ -23,7 +23,7 @@ leaves_positions = [int(height * 0.7), int(height * 0.8)]  # Initial positions o
 
 frames_final_with_realistic_owl = []
 
-# Generate frames with mucaro and transparency handling
+# Generate frames with realistic owl and transparency handling
 for frame_num in range(num_frames):
     frame = base_image.copy()
     draw = ImageDraw.Draw(frame)
@@ -33,7 +33,7 @@ for frame_num in range(num_frames):
     draw.ellipse([(sun_position[0] - 30, sun_position[1] - 30), 
                   (sun_position[0] + 30, sun_position[1] + 30)], fill=(255, 223, 128, 200))
 
-    # Add clouds
+    # Add natural-looking clouds
     for i, cloud_pos in enumerate(cloud_positions_extended):
         x_position = cloud_pos + frame_num * cloud_speed
         y_position = height * (0.1 + i * 0.05)  # Slightly staggered vertically
@@ -47,7 +47,7 @@ for frame_num in range(num_frames):
                       (width - y_position % width + 10, y_position % height + 5)], 
                      fill=(34, 139, 34, 150))
 
-    # Position and scale the mucaro image
+    # Position and scale the realistic owl image
     mucaro_x = int(mucaro_start[0] + (mucaro_end[0] - mucaro_start[0]) * (frame_num / num_frames))
     mucaro_y = int(mucaro_start[1] + (mucaro_end[1] - mucaro_start[1]) * (frame_num / num_frames))
     owl_size = int(150 * (1 + frame_num / num_frames))  # Larger scaling as the owl approaches
@@ -56,10 +56,14 @@ for frame_num in range(num_frames):
     owl_scaled = detailed_owl.resize((owl_size, owl_size), Image.Resampling.LANCZOS).convert("RGBA")
     frame.paste(owl_scaled, (mucaro_x - owl_size // 2, mucaro_y - owl_size // 2), owl_scaled)
 
+    # Resize the frame to 1024x640
+    frame = frame.resize((1024, 640), Image.Resampling.LANCZOS)
+    
+    # Append resized frame
     frames_final_with_realistic_owl.append(frame)
 
-# Save the final GIF with the mucaro and transparency correction
-realistic_owl_gif_path_final = "/mnt/data/animated_village_realistic_mucaro_final.gif"
+# Save the final GIF with the realistic owl and transparency correction
+realistic_owl_gif_path_final = "/mnt/data/animated_village_realistic_mucaro_final_1024x640.gif"
 frames_final_with_realistic_owl[0].save(realistic_owl_gif_path_final, save_all=True, append_images=frames_final_with_realistic_owl[1:], duration=100, loop=0, transparency=0)
 
 realistic_owl_gif_path_final
